@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script charset="UTF-8" src="js/jquery-2.1.4.js"></script>
+<script charset="UTF-8" src="js/test.js"></script>
+<script charset="UTF-8">
+$(function(){
+    $("#depoiste").click(function(){
+        $("#op").val("deposite");
+        doSubmit("account");
+    });
+    $("#withdraw").click(function(){
+        $("#op").val("withdraw");
+        doSubmit("account");
+    });
+    $("#transfer").click(function(){
+        $("#op").val("transfer");
+        doSubmit("account");
+    });
+});
+
+function doSubmit(url){
+    $.ajax({
+        type:"POST",
+        url:url,
+        data:$("#myform").serialize(),
+        dataType:"json",
+        success:function(data){
+            if(data.code == 1){
+                $("#result").html("<font size=16>操作成功，当前账户：" + data.obj.accountid +"&nbsp;&nbsp;&nbsp;余额："+data.obj.balance+"</font>");
+            }else{
+                $("#result").html("<font size=16 color='red'>操作失败，错误信息：" + data.msg+"</font>");
+            }
+        }
+    });
+}
+</script>
+</head>
+<body>
+    <form method="post" action="" id="myform">
+    <input type="hidden" id="op" name="op" value="">
+        <table>
+            <tr>
+                <td>Email业务</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>账户</td>
+                <td><input type="text" name="accountId" id="accountId"/></td>
+            </tr>
+            <tr>
+                <td>金额</td>
+                <td><input type="text" name="money"  id="money"/></td>
+            </tr>
+            <tr>
+                <td>转到账户</td>
+                <td><input type="text" name="inAccountId"  id="inAccountId"/></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" name="withdraw" id="withdraw" value="取款">
+                    <input type="button" name="depoiste" id="depoiste" value="存款">
+                    <input type="button" name="transfer" id="transfer" value="转账">
+                </td>
+            </tr>
+        </table>
+    </form>
+    
+    <div id="result"></div>
+</body>
+</html>

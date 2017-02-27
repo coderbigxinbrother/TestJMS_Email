@@ -1,0 +1,32 @@
+﻿
+
+create table accounts(
+    accountid int primary key,
+    balance number(10,2),
+    email varchar2(500)
+)
+
+create table oprecord(
+    id int primary key,
+    accountid int,
+    opmoney number(10,2),
+    optime date
+)
+
+alter table oprecord add constraint fk_oprecord_accountid foreign key(accountid) references accounts(accountid);
+
+alter table accounts add constraint ck_accounts_balance check(balance >= 0);
+
+create sequence seq_accounts;
+create sequence seq_oprecord;
+
+insert into accounts (accountid ,balance, email) values(seq_accounts.nextval, 100, '876821103@qq.com');
+insert into accounts (accountid ,balance, email) values(seq_accounts.nextval, 100, '876821103@qq.com');
+insert into accounts (accountid ,balance, email) values(seq_accounts.nextval, 100, '1003578071@qq.com');
+
+insert into accounts(accountid, balance) values (seq_accounts.nextval, -10);
+
+commit;
+
+select * from accounts;
+select * from oprecord;
